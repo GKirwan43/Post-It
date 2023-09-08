@@ -1,23 +1,27 @@
 "use client";
 
+var Spinner = require('react-spinkit');
+
 import { useState, useEffect } from "react";
 
 type PostButtonProps = {
-  formValid: boolean;
+  postButtonPressed: () => boolean;
 };
 
 const PostButton = (props: PostButtonProps) => {
-  const { formValid } = props;
+  const { postButtonPressed } = props;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   return (
     <button
       type="submit"
       className="button-blue"
-      onClick={() => (formValid ? setLoading(true) : setLoading(false))}
+      onClick={() => (postButtonPressed() ? setLoading(true) : setLoading(false))}
     >
-      {!loading ? "Post" : "Loading"}
+      {!loading ? "Post" : (
+        <Spinner name='three-bounce' color="white" className=""/>
+      )}
     </button>
   );
 };

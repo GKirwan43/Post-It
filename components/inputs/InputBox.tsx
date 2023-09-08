@@ -5,7 +5,20 @@ import PostButton from "./PostButton";
 import { useState, useEffect } from "react";
 
 const InputBox = () => {
-  const [formValid, setFormValid] = useState(false);
+  const [title, setTitle] = useState("");
+  const [post, setPost] = useState("");
+
+  const formValid = () => {
+    if (title && post) {
+      return true;
+    }
+
+    return false;
+  }
+
+  const postButtonPressed = () => {
+    return formValid();
+  };
 
   return (
     <div className="card">
@@ -15,6 +28,7 @@ const InputBox = () => {
           placeholder="Type your post title here."
           maxLength={60}
           className="title-input"
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
         <textarea
@@ -23,10 +37,11 @@ const InputBox = () => {
           placeholder="Type your post here."
           maxLength={320}
           className="post-input resize-none"
+          onChange={(e) => setPost(e.target.value)}
           required
         />
         <div className="flex sm:justify-end justify-center mtop-2">
-          <PostButton formValid={formValid} />
+          <PostButton postButtonPressed={postButtonPressed} />
         </div>
       </form>
     </div>
