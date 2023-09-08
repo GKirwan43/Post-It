@@ -1,7 +1,5 @@
 "use client";
 
-var Spinner = require('react-spinkit');
-
 import { useState, useEffect } from "react";
 
 type PostButtonProps = {
@@ -20,7 +18,7 @@ const PostButton = (props: PostButtonProps) => {
       onClick={() => (postButtonPressed() ? setLoading(true) : setLoading(false))}
     >
       {!loading ? "Post" : (
-        <Spinner name='three-bounce' color="white" className=""/>
+        
       )}
     </button>
   );
