@@ -13,7 +13,7 @@ const Home = () => {
           <h2 className="subtitle">My first NextJS project</h2>
           <h3 className="subtitle-2">Made by Gavin Kirwan</h3>
         </div>
-        <div className="mx-5 sm:mx-10 lg:mx-72">
+        <div className="mx-5 sm:mx-10 xl:mx-72">
           {loggedIn ? <InputBox /> : <InputBoxPlaceholder />}
         </div>
       </div>
