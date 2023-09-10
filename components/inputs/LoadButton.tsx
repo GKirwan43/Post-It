@@ -4,12 +4,13 @@ import { TailSpin } from "react-loader-spinner";
 
 import { useState, useEffect } from "react";
 
-type PostButtonProps = {
-  postButtonPressed: () => boolean;
+type props = {
+  text: string;
+  isFormValid: () => boolean;
 };
 
-const PostButton = (props: PostButtonProps) => {
-  const { postButtonPressed } = props;
+const LoadButton = (props: props) => {
+  const { text, isFormValid } = props;
 
   const [loading, setLoading] = useState(false);
 
@@ -17,12 +18,11 @@ const PostButton = (props: PostButtonProps) => {
     <button
       type="submit"
       className="button-blue"
-      onClick={() =>
-        postButtonPressed() ? setLoading(true) : setLoading(false)
-      }
+      onClick={() => (isFormValid() ? setLoading(true) : setLoading(false))}
+      disabled={loading}
     >
       {!loading ? (
-        "Post"
+        text
       ) : (
         <TailSpin height="25" width="25" color="white" ariaLabel="loading" />
       )}
@@ -30,4 +30,4 @@ const PostButton = (props: PostButtonProps) => {
   );
 };
 
-export default PostButton;
+export default LoadButton;

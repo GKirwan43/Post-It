@@ -1,11 +1,12 @@
 "use client";
 
-import PostButton from "./PostButton";
+import LoadButton from "./LoadButton";
 
 import { useState, useEffect } from "react";
 
 const InputBox = () => {
   const [showIssues, setShowIssues] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
 
@@ -18,9 +19,17 @@ const InputBox = () => {
   };
 
   const postButtonPressed = () => {
+    const isFormValid = formValid();
+
     setShowIssues(true);
 
-    return formValid();
+    if (isFormValid) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+
+    return isFormValid;
   };
 
   return (
@@ -34,6 +43,7 @@ const InputBox = () => {
           showIssues && title == "" && "border-2 border-red-500 rounded-lg mb-1"
         }`}
         onChange={(e) => setTitle(e.target.value)}
+        disabled={loading}
         required
       />
       <label
@@ -51,6 +61,7 @@ const InputBox = () => {
           showIssues && post == "" && "border-2 border-red-500 rounded-lg my-1"
         }`}
         onChange={(e) => setPost(e.target.value)}
+        disabled={loading}
         required
       />
       <label
@@ -60,7 +71,7 @@ const InputBox = () => {
         Text is required for a post.
       </label>
       <div className="flex sm:justify-end justify-center mtop-2">
-        <PostButton postButtonPressed={postButtonPressed} />
+        <LoadButton text="Post" isFormValid={postButtonPressed} />
       </div>
     </div>
   );
