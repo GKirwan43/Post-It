@@ -2,23 +2,22 @@
 
 import { TailSpin } from "react-loader-spinner";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
 
 type props = {
   text: string;
-  isFormValid: () => boolean;
+  loading: boolean;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
 const LoadButton = (props: props) => {
-  const { text, isFormValid } = props;
-
-  const [loading, setLoading] = useState(false);
+  const { text, loading, onClick } = props;
 
   return (
     <button
       type="submit"
       className="button-blue"
-      onClick={() => (isFormValid() ? setLoading(true) : setLoading(false))}
+      onClick={onClick}
       disabled={loading}
     >
       {!loading ? (

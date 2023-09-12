@@ -1,34 +1,45 @@
+"use client"
+
 import InputBox from "@/components/inputs/InputBox";
+import CenterSpinner from "@/components/loading/CenterSpinner";
 import InputBoxPlaceholder from "@/components/placeholders/InputBoxPlaceholder";
 import Posts from "@/components/posts/posts";
 import React from "react";
 
+import { useState, useEffect } from "react"
+import { getPosts } from "@/utils/posts";
+
 const Home = () => {
   const loggedIn = false;
 
-  const posts = [
-    {
-      id: 0,
-      username: "testUser",
-      date: "9/9/2023",
-      title: "Post 1",
-      post: "This is an example for post 1.",
-    },
-    {
-      id: 1,
-      username: "testUser",
-      date: "9/9/2023",
-      title: "Post 2",
-      post: "This is an example for post 2.",
-    },
-    {
-      id: 2,
-      username: "testUser",
-      date: "9/9/2023",
-      title: "Post 3",
-      post: "This is an example for post 3.",
-    },
-  ];
+  const [posts, setPosts] = useState(null);
+  const [error, setError] = useState(null);
+
+  const loadPosts =  async () => {
+    let res = await getPosts();
+
+    if (!res.error) {
+      setPosts(res.posts);
+    } else {
+      setError(res.error);
+    }
+  }
+
+  const content = () => {
+    if (error) {
+      return <p className="text-lg text-red-500 text-center my-5">{error}</p>
+    }
+
+    if (posts) {
+      return <Posts posts={posts} />
+    }
+
+    return <CenterSpinner />
+  }
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
 
   return (
     <>
@@ -40,7 +51,7 @@ const Home = () => {
         </div>
         <div className="mx-5 sm:mx-10 xl:mx-72">
           {loggedIn ? <InputBox /> : <InputBoxPlaceholder />}
-          <Posts posts={posts} />
+          {content()}
         </div>
       </div>
     </>

@@ -76,4 +76,8 @@
     .input-text {
         @apply block bg-transparent rounded-2xl border-black border-2 p-2.5 border-slate-400;
     }
+
+    .label-error {
+        @apply text-red-500 mb-2.5 text-sm;
+    }
 }
