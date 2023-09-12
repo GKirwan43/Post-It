@@ -16,3 +16,20 @@ export async function createAccount(username: string, email: string, password: s
       return error as Response;
     }
 }
+
+export async function login(username: string, password: string) {
+    try {
+        const res = await fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username,
+                password,
+            }),
+        }).then((res) => res.json());
+
+        return res;
+    } catch (error) {
+        return error as Response;
+    }
+}

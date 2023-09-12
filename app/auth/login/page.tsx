@@ -2,28 +2,44 @@
 
 import LoadButton from "@/components/inputs/LoadButton";
 import TextInput from "@/components/inputs/TextInput";
+import { login } from "@/utils/auth";
+import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 
-const EmptyInput = () => {
-  return {
-    text: "",
-    error: "",
-    showError: false,
-  }
+interface ErrorType {
+  id: string,
+  text: string,
 }
 
-const Register = () => {
-  const [username, setUsername] = useState(EmptyInput);
-  const [password, setPassword] = useState(EmptyInput);
+const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<ErrorType[]>([]);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const isFormValid = () => {
-    const isError = true;
+  const { push } = useRouter();
 
-    setUsername({...username, error: "This is an example error", showError: true});
+  const getErrors = (id: string) => {
+    return errors.filter(item => item.id === id);
+  };
 
-    return !isError;
-  }
+  const loginButtonPressed = async () => {
+    setLoading(true);
+    setErrors([]);
+
+    const res = await login(username, password);
+
+    if (res.status === 201) {
+      push("/");
+    } else if (res.status === 400) {
+      setErrors(await res.json());
+    }
+
+    setLoading(false);
+  };
 
   return (
     <>
@@ -31,7 +47,7 @@ const Register = () => {
         <div className="text-center my-10">
           <h1 className="title">Welcome back to Post It!</h1>
           <h2 className="subtitle">
-            Fill out the form to login!
+            Fill out the form below to login!
           </h2>
         </div>
         <div className="card w-fit m-auto">
@@ -39,20 +55,23 @@ const Register = () => {
             type="text" 
             text="Username" 
             placeholder="Your username" 
-            error={username.error}
-            showError={username.showError}
-            onChange={(e) => {setUsername({...username, text: e.target.value, showError: false})}}
+            errors={getErrors("username")}
+            maxLength={16}
+            onChange={(e) => {setUsername(e.target.value)}}
+            onKeyDown={(e) => e.key === "Enter" && loginButtonPressed()}
+            value={username}
           />
           <TextInput
             type="password"
             text="Passoword"
             placeholder="Your password"
-            error={password.error}
-            showError={password.showError}
-            onChange={(e) => {setPassword({...password, text: e.target.value, showError: false})}}
+            errors={getErrors("password")}
+            onChange={(e) => {setPassword(e.target.value)}}
+            onKeyDown={(e) => e.key === "Enter" && loginButtonPressed()}
+            value={password}
           />
           <div className="text-center mt-5">
-            <LoadButton text="Login" isFormValid={isFormValid} />
+            <LoadButton text="Create Account" loading={loading} onClick={loginButtonPressed} />
           </div>
         </div>
       </div>
@@ -60,4 +79,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
