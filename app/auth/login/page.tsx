@@ -16,9 +16,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ErrorType[]>([]);
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const { push } = useRouter();
 
@@ -34,7 +32,8 @@ const Login = () => {
 
     if (res.status === 201) {
       push("/");
-    } else if (res.status === 400) {
+    } else if (res.status === 401) {
+      console.log('test')
       setErrors(await res.json());
     }
 

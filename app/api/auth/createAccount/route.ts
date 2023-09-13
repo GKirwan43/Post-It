@@ -1,5 +1,7 @@
+import User from '@/models/user';
+
+import { connectToDB } from '@/utils/database';
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
 
 function errorModel(id: string, text: string) {
     return {
@@ -7,17 +9,12 @@ function errorModel(id: string, text: string) {
         text: text,
     }
 }
- 
+
 export async function POST(request: NextRequest) {
-    const body = await request.json();
-    const username = body.username;
-    const email = body.email;
-    const password = body.password;
-    const confirmPassword = body.confirmPassword;
+    const { username, email, password, confirmPassword } = await request.json();
 
+    const errors = [];
     const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-
-    let errors = [];
 
     if (username.length < 5) {
         errors.push(errorModel("username", "Username can not be less than 5 characters."));
@@ -48,12 +45,24 @@ export async function POST(request: NextRequest) {
     }
 
     if (confirmPassword === "") {
-        errors.push(errorModel("confirmPassword", "Password can not be blank."));
+        errors.push(errorModel("confirmPassword", "Password can not be less than 5 characters."));
     }
 
     if (errors.length > 0) {
         return NextResponse.json(errors, { status: 400 });
     }
+    
+    try {
+        await connectToDB();
 
-    return NextResponse.json("Account was created", { status: 201 });
+        await User.create({
+            username,
+            email,
+            password,
+        })
+
+        return NextResponse.json("Account was created", { status: 201 });
+    } catch (error) {
+        return NextResponse.json(error, { status: 500 })
+    }
 }

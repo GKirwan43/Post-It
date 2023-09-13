@@ -13,7 +13,7 @@ export async function createAccount(username: string, email: string, password: s
 
         return res as Response;
     } catch (error) {
-      return error as Response;
+        return error as Response;
     }
 }
 
@@ -26,9 +26,9 @@ export async function login(username: string, password: string) {
                 username,
                 password,
             }),
-        }).then((res) => res.json());
+        });
 
-        return res;
+        return res as Response;
     } catch (error) {
         return error as Response;
     }

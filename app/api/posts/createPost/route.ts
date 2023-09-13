@@ -1,5 +1,7 @@
+import Post from '@/models/post';
+
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import { connectToDB } from '@/utils/database';
 
 function errorModel(id: string, text: string) {
     return {
@@ -7,33 +9,17 @@ function errorModel(id: string, text: string) {
         text: text,
     }
 }
- 
+
 export async function POST(request: NextRequest) {
-    const body = await request.json();
-    const title = body.title;
-    const post = body.post;
+    const { title, post } = await request.json();
 
-    let errors = [];
+    try {
+        await connectToDB();
 
-    if (title == "") {
-        errors.push(errorModel("title", "Title can not be blank."));
+        await Post.create({ date: new Date(), title, post });
+
+        return NextResponse.json("Post was created", { status: 201 });
+    } catch (error) {
+        return NextResponse.json(error, { status: 500 });
     }
-    
-    if (title.length > 60) {
-        errors.push(errorModel("title", "Title can not be longer than 60 characters."));
-    }
-
-    if (post == "") {
-        errors.push(errorModel("post", "Post can not be blank."));
-    }
-
-    if (post.length > 320) {
-        errors.push(errorModel("post", "Post can not be longer than 320 character."));
-    }
-
-    if (errors.length > 0) {
-        return NextResponse.json(errors, { status: 400 });
-    }
-
-    return NextResponse.json("Post was created", { status: 201 });
 }

@@ -1,30 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import User from "@/models/user";
+import Post from "@/models/post";
 
-const posts = [
-    {
-      id: 0,
-      username: "testUser",
-      date: "9/9/2023",
-      title: "Post 1",
-      post: "This is an example for post 1.",
-    },
-    {
-      id: 1,
-      username: "testUser",
-      date: "9/9/2023",
-      title: "Post 2",
-      post: "This is an example for post 2.",
-    },
-    {
-      id: 2,
-      username: "testUser",
-      date: "9/9/2023",
-      title: "Post 3",
-      post: "This is an example for post 3.",
-    },
-  ];
- 
+import { NextRequest, NextResponse } from 'next/server';
+import { connectToDB } from '@/utils/database';
+
 export async function GET(request: NextRequest) {
-  return NextResponse.json({ posts });
+  try {
+    await connectToDB();
+
+    let posts = await Post.find().sort({ date: -1 });
+
+    const getUsername = await posts.map(async (post) => {
+      const postWithUsername = { ...post.toObject() };
+      postWithUsername.username = (await User.findOne({ _id: post.toObject().userId })).username;
+      return postWithUsername;
+    });
+
+    posts = await Promise.all(getUsername);
+
+    return NextResponse.json({ posts });
+  } catch (error) {
+    console.log(error);
+  }
 }

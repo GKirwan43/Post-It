@@ -1,5 +1,7 @@
+import User from "@/models/user";
+import { connectToDB } from "@/utils/database";
+
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
 
 function errorModel(id: string, text: string) {
     return {
@@ -8,36 +10,28 @@ function errorModel(id: string, text: string) {
     }
 }
 
-const accounts = [
-    {
-        id: 0,
-        username: "testUser",
-        password: "test",
-    }, {
-        id: 0,
-        username: "testUser1",
-        password: "test",
-    }
-  ];
- 
 export async function POST(request: NextRequest) {
-    const body = await request.json();
-    const username = body.username;
-    const password = body.password;
+    const { username, password }= await request.json();
 
-    const account = accounts.find(item => item.username === username);
+    try {
+        await connectToDB();
 
-    let errors = [];
+        const correctInfo = await User.findOne({
+            username,
+            password,
+        });
 
-    if (!account || account.password != password) {
-        errors.push(errorModel("password", "Username or password is incorrect."));
+        if (correctInfo) {
+            return NextResponse.json("Login Successful", { status: 201 });
+        } else {
+            let errors = [
+                errorModel("username", ""),
+                errorModel("password", "Username or password is incorrect."),
+            ]
+
+            return NextResponse.json(errors, { status: 401 });
+        }
+    } catch (error) {
+        return NextResponse.json(error, { status: 500 })
     }
-
-    if (errors.length > 0) {
-        return NextResponse.json(errors, { status: 400 });
-    }
-
-    console.log(account);
-
-    return NextResponse.json({ accounts });
 }

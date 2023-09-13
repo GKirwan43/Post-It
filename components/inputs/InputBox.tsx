@@ -5,7 +5,13 @@ import LoadButton from "./LoadButton";
 import { useState } from "react";
 import { createPost } from "@/utils/posts";
 
-const InputBox = () => {
+type InputBoxProps = {
+  onSubmit: () => {};
+};
+
+const InputBox = (props: InputBoxProps) => {
+  const { onSubmit } = props;
+
   const [showIssues, setShowIssues] = useState(false);
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -35,9 +41,10 @@ const InputBox = () => {
       const res = await createPost(title, post);
 
       if (res.status === 201) {
+        onSubmit();
         resetForm();
       } else {
-        console.log((await res.json()).errors)
+        console.log((await res.json()).errors);
         setLoading(false);
       }
     } else {
@@ -87,7 +94,7 @@ const InputBox = () => {
         Text is required for a post.
       </label>
       <div className="flex sm:justify-end justify-center mtop-2">
-        <LoadButton text="Post" loading={loading} onClick={postButtonPressed}/>
+        <LoadButton text="Post" loading={loading} onClick={postButtonPressed} />
       </div>
     </div>
   );
