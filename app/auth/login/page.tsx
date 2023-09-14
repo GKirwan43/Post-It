@@ -2,7 +2,7 @@
 
 import LoadButton from "@/components/inputs/LoadButton";
 import TextInput from "@/components/inputs/TextInput";
-import { login } from "@/utils/auth";
+import { login } from "@/utils/requests/auth";
 import { useRouter } from "next/navigation";
 
 import { useState } from "react";

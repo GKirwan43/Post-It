@@ -3,7 +3,7 @@
 import LoadButton from "./LoadButton";
 
 import { useState } from "react";
-import { createPost } from "@/utils/posts";
+import { createPost } from "@/utils/requests/posts";
 
 type InputBoxProps = {
   onSubmit: () => {};

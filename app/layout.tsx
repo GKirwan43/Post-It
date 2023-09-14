@@ -1,5 +1,7 @@
+import Nav from "@/components/navigation/Nav";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
+import { auth } from "@/utils/requests/auth"
 
 export const metadata: Metadata = {
   title: "Post It",
@@ -11,9 +13,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const {}
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Nav />
+        {children}
+      </body>
     </html>
   );
 }

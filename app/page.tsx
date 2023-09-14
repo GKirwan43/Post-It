@@ -4,11 +4,10 @@ import InputBox from "@/components/inputs/InputBox";
 import CenterSpinner from "@/components/loading/CenterSpinner";
 import InputBoxPlaceholder from "@/components/placeholders/InputBoxPlaceholder";
 import Posts from "@/components/posts/posts";
-import React from "react";
 
 import { useState, useEffect } from "react";
-import { getPosts } from "@/utils/posts";
-import { auth } from "@/utils/auth";
+import { getPosts } from "@/utils/requests/posts";
+import { auth } from "@/utils/requests/auth";
 
 const Home = () => {
   const [loggedIn, setLoggedIn] = useState(false);
