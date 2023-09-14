@@ -1,10 +1,8 @@
 import User from "@/models/user";
 import Session from "@/models/session";
-import { connectToDB } from "@/utils/database";
-import { v4 as uuidv4 } from "uuid";
+import { connectToDB, createSession } from "@/utils/database";
 
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 function errorModel(id: string, text: string) {
     return {
@@ -25,16 +23,7 @@ export async function POST(request: NextRequest) {
         });
 
         if (user) {
-            const sessionToken = uuidv4();
-            const expiresAt = new Date().setFullYear(new Date().getFullYear() + 1);
-
-            await Session.create({
-                user_id: user._id,
-                session_token: sessionToken,
-                expires_at: expiresAt,
-            })
-
-            cookies().set("session_token", sessionToken, { maxAge: expiresAt })
+            await createSession(user);
 
             return NextResponse.json("Login Successful", { status: 201 });
         } else {
@@ -46,6 +35,8 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ errors });
         }
     } catch (error) {
+        console.log("Ran")
+
         return NextResponse.json("Error loggining in", { status: 500 })
     }
 }

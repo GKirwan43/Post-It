@@ -1,9 +1,8 @@
 import { Schema, model, models } from "mongoose";
-import { ClassificationType } from "typescript";
 
 const SessionSchema = new Schema({
     user_id: {
-        type: Map,
+        type: String,
         required: true,
     },
     session_token: {

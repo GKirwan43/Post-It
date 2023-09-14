@@ -19,11 +19,11 @@ const Posts = (props: props) => {
     <>
       {posts.map((post) => (
         <div className="card my-2.5" key={post._id}>
-          <p className="title-text">{post.title}</p>
-          <p className="subtitle-text">
+          <p className="title-text break-all">{post.title}</p>
+          <p className="subtitle-text break-all">
             Posted by {post.username} on {post.date}
           </p>
-          <p className="post-text">{post.post}</p>
+          <p className="post-text break-all">{post.post}</p>
         </div>
       ))}
     </>

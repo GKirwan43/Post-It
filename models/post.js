@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 const PostSchema = new Schema({
-    username: {
+    user_id: {
         type: String,
         required: true,
     },

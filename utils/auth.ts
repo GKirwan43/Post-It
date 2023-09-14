@@ -11,7 +11,7 @@ export async function createAccount(username: string, email: string, password: s
             })
         }).then((res) => res.json());
 
-        return { ok: data.errors === null, errors: data.errors }
+        return { ok: data.errors === undefined, errors: data.errors }
     } catch (error) {
         return { error: "Error creating account" }
     }
@@ -28,7 +28,7 @@ export async function login(username: string, password: string) {
             }),
         }).then((res) => res.json());
 
-        return { ok: data.errors === null, errors: data.errors }
+        return { ok: data.errors === undefined, errors: data.errors }
     } catch (error) {
         return { error: "Error logging in" }
     }

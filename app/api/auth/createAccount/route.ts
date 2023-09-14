@@ -1,6 +1,6 @@
 import User from '@/models/user';
 
-import { connectToDB } from '@/utils/database';
+import { connectToDB, createSession } from '@/utils/database';
 import { NextRequest, NextResponse } from 'next/server';
 
 function errorModel(field: string, message: string) {
@@ -47,22 +47,34 @@ export async function POST(request: NextRequest) {
     if (confirmPassword === "") {
         errors.push(errorModel("confirmPassword", "Password can not be less than 5 characters."));
     }
-
-    if (errors.length > 0) {
-        return NextResponse.json({ errors });
-    }
     
     try {
         await connectToDB();
 
-        await User.create({
+        if (await User.findOne({ username })) {
+            errors.push(errorModel("username", "Username already exits."));
+        }
+
+        if (await User.findOne({ email })) {
+            errors.push(errorModel("email", "Email already is being used."));
+        }
+
+        if (errors.length > 0) {
+            return NextResponse.json({ errors });
+        }
+
+        const user = await User.create({
             username,
             email,
             password,
-        })
+        });
+
+        await createSession(user);
 
         return NextResponse.json("Account was created", { status: 201 });
     } catch (error: any) {
+        console.log(error)
+
         return NextResponse.json("Error creating account", { status: 500 })
     }
 }
