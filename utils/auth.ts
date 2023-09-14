@@ -1,6 +1,6 @@
 export async function createAccount(username: string, email: string, password: string, confirmPassword: string) {
     try {
-        const res = await fetch("http://localhost:3000/api/auth/createAccount", {
+        const data = await fetch("http://localhost:3000/api/auth/createAccount", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -9,27 +9,27 @@ export async function createAccount(username: string, email: string, password: s
                 password: password,
                 confirmPassword: confirmPassword,
             })
-        });
+        }).then((res) => res.json());
 
-        return res as Response;
+        return { ok: data.errors === null, errors: data.errors }
     } catch (error) {
-        return error as Response;
+        return { error: "Error creating account" }
     }
 }
 
 export async function login(username: string, password: string) {
     try {
-        const res = await fetch("http://localhost:3000/api/auth/login", {
+        const data = await fetch("http://localhost:3000/api/auth/login", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username,
                 password,
             }),
-        });
+        }).then((res) => res.json());
 
-        return res as Response;
+        return { ok: data.errors === null, errors: data.errors }
     } catch (error) {
-        return error as Response;
+        return { error: "Error logging in" }
     }
 }

@@ -12,8 +12,7 @@ type props = {
 };
 
 interface ErrorType {
-  id: string,
-  text: string,
+  message: string,
 }
 
 const TextInput = (props: props) => {
@@ -36,7 +35,7 @@ const TextInput = (props: props) => {
       />
       {errors.map((error, index) => (
         <label className="label-error" key={index}>
-          {error.text}
+          {error.message}
         </label>
       ))}
       <div className="h-.5"/>

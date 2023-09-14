@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 function errorModel(id: string, text: string) {
     return {
-        id: id,
-        text: text,
+        field: id,
+        message: text,
     }
 }
 
@@ -29,9 +29,9 @@ export async function POST(request: NextRequest) {
                 errorModel("password", "Username or password is incorrect."),
             ]
 
-            return NextResponse.json(errors, { status: 401 });
+            return NextResponse.json({ errors });
         }
     } catch (error) {
-        return NextResponse.json(error, { status: 500 })
+        return NextResponse.json("Error loggining in", { status: 500 })
     }
 }

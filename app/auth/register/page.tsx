@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface ErrorType {
-  id: string,
-  text: string,
+  field: string,
+  message: string,
 }
 
 const Register = () => {
@@ -22,8 +22,8 @@ const Register = () => {
 
   const { push } = useRouter();
 
-  const getErrors = (id: string) => {
-    return errors.filter(item => item.id === id);
+  const getErrors = (field: string) => {
+    return errors.filter(item => item.field === field);
   };
 
   const createAccountButtonPressed = async () => {
@@ -32,10 +32,10 @@ const Register = () => {
 
     const res = await createAccount(username, email, password, confirmPassword);
 
-    if (res.status === 201) {
+    if (res.ok) {
       push("/");
-    } else if (res.status === 400) {
-      setErrors(await res.json());
+    } else if (res.errors) {
+      setErrors(res.errors);
     }
 
     setLoading(false);

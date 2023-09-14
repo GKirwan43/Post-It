@@ -20,6 +20,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ posts });
   } catch (error) {
-    console.log(error);
+    return NextResponse.json("Could not connect to database.", {status: 500 });
   }
 }

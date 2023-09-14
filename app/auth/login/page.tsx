@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface ErrorType {
-  id: string,
-  text: string,
+  field: string,
+  message: string,
 }
 
 const Login = () => {
@@ -20,8 +20,8 @@ const Login = () => {
 
   const { push } = useRouter();
 
-  const getErrors = (id: string) => {
-    return errors.filter(item => item.id === id);
+  const getErrors = (field: string) => {
+    return errors.filter(item => item.field === field);
   };
 
   const loginButtonPressed = async () => {
@@ -30,11 +30,10 @@ const Login = () => {
 
     const res = await login(username, password);
 
-    if (res.status === 201) {
+    if (res.ok) {
       push("/");
-    } else if (res.status === 401) {
-      console.log('test')
-      setErrors(await res.json());
+    } else if (res.errors) {
+      setErrors(res.errors);
     }
 
     setLoading(false);

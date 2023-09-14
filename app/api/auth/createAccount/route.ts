@@ -3,10 +3,10 @@ import User from '@/models/user';
 import { connectToDB } from '@/utils/database';
 import { NextRequest, NextResponse } from 'next/server';
 
-function errorModel(id: string, text: string) {
+function errorModel(field: string, message: string) {
     return {
-        id: id,
-        text: text,
+        field: field,
+        message: message,
     }
 }
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (errors.length > 0) {
-        return NextResponse.json(errors, { status: 400 });
+        return NextResponse.json({ errors });
     }
     
     try {
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         })
 
         return NextResponse.json("Account was created", { status: 201 });
-    } catch (error) {
-        return NextResponse.json(error, { status: 500 })
+    } catch (error: any) {
+        return NextResponse.json("Error creating account", { status: 500 })
     }
 }

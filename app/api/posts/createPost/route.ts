@@ -3,13 +3,6 @@ import Post from '@/models/post';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/utils/database';
 
-function errorModel(id: string, text: string) {
-    return {
-        id: id,
-        text: text,
-    }
-}
-
 export async function POST(request: NextRequest) {
     const { title, post } = await request.json();
 
@@ -20,6 +13,6 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json("Post was created", { status: 201 });
     } catch (error) {
-        return NextResponse.json(error, { status: 500 });
+        return NextResponse.json("Could not connect to database.", { status: 500 });
     }
 }

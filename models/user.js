@@ -6,19 +6,19 @@ const UserSchema = new Schema({
         unique: [true, "Username already exists."],
         minLength: [5, "Username can not be less than 5 characters."],
         maxLength: [16, "Username can not be longer than 16 characters."],
-        required: true,
+        required: [true, "Username can not be blank"],
     },
     email: {
         type: String,
         minLength: [1, "Email can not be blank."],
         match: [/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/, "Email must be in form email@example.com."],
-        required: true,
+        required: [true, "Email can not be blank"],
     },
     password: {
         type: String,
         minLength: [5, "Password can not be less than 5 characters."],
         maxLength: [16, "Password can not be longer than 16 character."],
-        required: true,
+        required: [true, "Password can not be blank"],
     },
 });
 

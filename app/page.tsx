@@ -10,36 +10,41 @@ import { useState, useEffect } from "react";
 import { getPosts } from "@/utils/posts";
 
 const Home = () => {
-  const loggedIn = false;
+  const loggedIn = true;
 
+  const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const loadPosts = async () => {
-    let res = await getPosts();
+    setLoading(true);
+
+    const res = await getPosts();
 
     if (!res.error) {
       setPosts(res.posts);
     } else {
-      setError(res.error);
+      setError(error);
     }
+
+    setLoading(false);
   };
 
   const content = () => {
-    if (error) {
-      return <p className="text-lg text-red-500 text-center my-5">{error}</p>;
-    }
+    if (!loading) {
+      if (error != "") {
+        return <p className="text-lg text-red-500 text-center my-5">{error}</p>;
+      }
 
-    if (posts) {
-      if (posts.length === 0) {
+      if (posts.length > 0) {
+        return <Posts posts={posts} />;
+      } else {
         return (
           <div className="card my-2">
             <p className="text-3xl text-center my-40">There are no posts.</p>
           </div>
         );
       }
-
-      return <Posts posts={posts} />;
     }
 
     return <CenterSpinner />;

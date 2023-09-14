@@ -40,11 +40,10 @@ const InputBox = (props: InputBoxProps) => {
 
       const res = await createPost(title, post);
 
-      if (res.status === 201) {
+      if (res.ok) {
         onSubmit();
         resetForm();
       } else {
-        console.log((await res.json()).errors);
         setLoading(false);
       }
     } else {

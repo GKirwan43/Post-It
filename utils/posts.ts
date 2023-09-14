@@ -2,11 +2,16 @@ export async function getPosts() {
     try {
         const res = await fetch("http://localhost:3000/api/posts/getPosts", {
             method: "GET",
-        }).then((res) => res.json());
+        });
+        const data = await res.json();
 
-        return res;
+        const result = res.ok
+        ? data
+        : { error: data };
+      
+        return result;
     } catch (error) {
-      return {"error": error};
+      return { error: "Could not recieve posts."};
     }
 }
 
@@ -20,9 +25,10 @@ export async function createPost(title: string, post: string) {
                 post: post,
             })
         });
+        const data = await res.json();
 
-        return res as Response;
+        return { ok: res.ok, error: data };
     } catch (error) {
-      return error as Response;
+      return { error: "Error creating post." }
     }
 }
