@@ -33,3 +33,20 @@ export async function login(username: string, password: string) {
         return { error: "Error logging in" }
     }
 }
+
+export async function auth() {
+    try {
+        const res = await fetch("http://localhost:3000/api/auth", {
+            method: "GET",
+        })
+        const data = await res.json();
+
+        if (res.ok) {
+            return data;
+        } else {
+            return { error: res.statusText }
+        }
+    } catch (error) {
+        return { error: "Error authenticating" }
+    }
+}

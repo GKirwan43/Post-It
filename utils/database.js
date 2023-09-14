@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import User from "@/models/user"
+
 let isConnected = false;
 
 export const connectToDB = async () => {
@@ -22,4 +24,10 @@ export const connectToDB = async () => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const getUsername = async (id) => {
+    const username = (await User.findOne({ _id: id })).username;
+
+    return username;
 }

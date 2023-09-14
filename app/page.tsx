@@ -8,10 +8,10 @@ import React from "react";
 
 import { useState, useEffect } from "react";
 import { getPosts } from "@/utils/posts";
+import { auth } from "@/utils/auth";
 
 const Home = () => {
-  const loggedIn = true;
-
+  const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
@@ -52,6 +52,10 @@ const Home = () => {
 
   useEffect(() => {
     loadPosts();
+
+    auth().then((data) => {
+      setLoggedIn(!data.error);
+    });
   }, []);
 
   return (

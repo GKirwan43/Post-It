@@ -1,7 +1,10 @@
 import User from "@/models/user";
+import Session from "@/models/session";
 import { connectToDB } from "@/utils/database";
+import { v4 as uuidv4 } from "uuid";
 
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 function errorModel(id: string, text: string) {
     return {
@@ -11,17 +14,28 @@ function errorModel(id: string, text: string) {
 }
 
 export async function POST(request: NextRequest) {
-    const { username, password }= await request.json();
+    const { username, password } = await request.json();
 
     try {
         await connectToDB();
 
-        const correctInfo = await User.findOne({
+        const user = await User.findOne({
             username,
             password,
         });
 
-        if (correctInfo) {
+        if (user) {
+            const sessionToken = uuidv4();
+            const expiresAt = new Date().setFullYear(new Date().getFullYear() + 1);
+
+            await Session.create({
+                user_id: user._id,
+                session_token: sessionToken,
+                expires_at: expiresAt,
+            })
+
+            cookies().set("session_token", sessionToken, { maxAge: expiresAt })
+
             return NextResponse.json("Login Successful", { status: 201 });
         } else {
             let errors = [
