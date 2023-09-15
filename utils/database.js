@@ -53,3 +53,7 @@ export const getSession = async (session_token) => {
 
     return session;
 }
+
+export const deleteSession = async (session_token) => {
+    await Session.remove({ session_token: session_token.value });
+}

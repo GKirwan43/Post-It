@@ -50,3 +50,19 @@ export async function auth() {
         return { error: "Error authenticating" }
     }
 }
+
+export async function logout() {
+    try {
+        const res = await fetch("http://localhost:3000/api/auth", {
+            method: "POST",
+        })
+
+        if (res.ok) {
+            return;
+        } else {
+            return { error: res.statusText }
+        }
+    } catch (error) {
+        return { error: "Error authenticating" }
+    }
+}

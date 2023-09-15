@@ -17,6 +17,7 @@ export default function RootLayout({
       <body>
         <Nav />
         {children}
+        <footer className="m-10"></footer>
       </body>
     </html>
   );
