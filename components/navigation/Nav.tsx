@@ -13,7 +13,7 @@ const Nav = () => {
         setLoggedIn(true);
       }
     })
-  }, [])
+  })
 
   return (
     <header className="flex justify-between p-5">
